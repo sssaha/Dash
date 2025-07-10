@@ -286,7 +286,9 @@ def update_kpi(bp, sex, anaemia):
     # Copying and filtering dataframe
     filtered_df = df1
     filtered_df = filter_dataframe(filtered_df, bp, sex, anaemia)
-    filtered_df.to_feather(os.path.join(program_data_folder, f'{uuid.uuid4()}.feather'))
+    file_name_pd = f'{uuid.uuid4()}.feather'
+    filtered_df.to_feather(os.path.join(program_data_folder, file_name_pd))
+    app.logger.info(f"Filtered dataframe size: {filtered_df.shape} - saved to file -- {file_name_pd}")
     observation_count = filtered_df.shape[0]
     death_count = filtered_df[filtered_df['DEATH_EVENT'] == 1].shape[0]
     no_death_count = filtered_df[filtered_df['DEATH_EVENT'] == 0].shape[0]
