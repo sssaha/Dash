@@ -9,3 +9,4 @@ connectorx
 dash-mantine-components
 dash-ag-grid
 connectorx
+requests_kerberos

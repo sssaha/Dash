@@ -28,7 +28,8 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-      
+      - name : Install LibGCC
+        run : apt-get update -y && apt-get upgrade -y && apt-get install -y libkrb5-dev gcc
       - name: Install dependencies
         run: pip install -r requirements.txt
         
