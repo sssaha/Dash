@@ -9,4 +9,5 @@ connectorx
 dash-mantine-components
 dash-ag-grid
 connectorx
+timezonefinder
 requests_kerberos
