@@ -8,3 +8,4 @@ pyarrow
 connectorx
 dash-mantine-components
 dash-ag-grid
+connectorx
