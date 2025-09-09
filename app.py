@@ -1,7 +1,12 @@
 from typing import Union
 
 from fastapi import FastAPI
+import redis
+redis_host = "mdct.redis.cache.windows.net"
+redis_port = 6380
+redis_password = "KMlFJyj2BPCYPHgMmsd9JR6mFboCCOYRSAzCaJV9olY="
 
+r = redis.Redis(host=redis_host, port=redis_port, password=redis_password, decode_responses=True)
 app = FastAPI()
 
 
@@ -12,6 +17,12 @@ def read_root():
 
 @app.get("/items/{item_id}")
 def read_item(item_id: int, q: Union[str, None] = None):
+    # Connect to Redis (replace with your actual connection details)
+    
+
+    # Push data to Redis
+    data = {"item_id": item_id, "q": q}
+    r.set(f"item:{item_id}", str(data))
     return {"item_id": item_id, "q": q}
 
 
