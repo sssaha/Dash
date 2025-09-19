@@ -1,11 +1,13 @@
+import eventlet
+eventlet.monkey_patch()
 import time
 import uuid
 from dash_socketio import DashSocketIO
 import dash_mantine_components as dmc
-from dash import Dash, Input, Output, State, _dash_renderer, callback, clientside_callback, html, no_update
+from dash import Dash, Input, Output, State, callback, clientside_callback, html, no_update
 from flask_socketio import SocketIO, emit
 
-_dash_renderer._set_react_version("18.3.1")
+
 app = Dash(__name__, external_stylesheets=dmc.styles.ALL)
 app.server.secret_key = "Test!"
 
@@ -112,9 +114,10 @@ clientside_callback(
     prevent_initial_call=True,
 )
 
+server = app.server
 
-if __name__ == '__main__':
-    app.run(debug=True)
+
+
 
 
 # from typing import Union
