@@ -32,8 +32,10 @@ ctx = snowflake.connector.connect(
 
 cur = ctx.cursor()
 sql = "Select TOP 100 * from PIDATA"
+print(sql)
 cur.execute(sql)
 df = cur.fetch_pandas_all()
+print(df)
 columnDefs = [{"field": x, "sortable": False} for x in df.columns]
 
 app.layout = dmc.MantineProvider(
