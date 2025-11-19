@@ -1,5 +1,5 @@
-sudo apt-get update -y 
-sudo apt-get upgrade -y 
+sudo apt-get update -y
+sudo apt-get upgrade -y
 sudo apt-get install -y libkrb5-dev gcc
 
 
@@ -16,12 +16,12 @@ sudo apt-get install -y unixodbc-dev
 sudo apt-get install -y libgssapi-krb5-2
 
 
-sudo apt-get install lsb-release curl gpg
-curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
-sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
-sudo apt-get update
-sudo apt-get install redis
+# sudo apt-get install lsb-release curl gpg
+# curl -fsSL https://packages.redis.io/gpg | sudo gpg --dearmor -o /usr/share/keyrings/redis-archive-keyring.gpg
+# sudo chmod 644 /usr/share/keyrings/redis-archive-keyring.gpg
+# echo "deb [signed-by=/usr/share/keyrings/redis-archive-keyring.gpg] https://packages.redis.io/deb $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/redis.list
+# sudo apt-get update
+# sudo apt-get install redis
 
-sudo systemctl enable redis-server
-sudo systemctl start redis-server
+# sudo systemctl enable redis-server
+# sudo systemctl start redis-server

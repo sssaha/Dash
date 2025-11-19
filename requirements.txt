@@ -1,11 +1,8 @@
 pandas
 dash
 dash-bootstrap-components
-scikit-learn
 pyodbc
-sqlalchemy
 pyarrow
-fastapi[standard]
 gunicorn
 snowflake-connector-python
 dash_mantine_components
