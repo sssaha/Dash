@@ -1,3 +1,4 @@
+import os
 import time
 import uuid
 
@@ -17,13 +18,13 @@ from dash import (
 
 app = Dash(__name__, external_stylesheets=dmc.styles.ALL)
 ctx = snowflake.connector.connect(
-    user="SSSAHA1989",
-    password="1989S!hammyas!N",
-    account="LKBZCQP-WHA95916",
-    warehouse="COMPUTE_WH",
+    user=os.getenv("SNOWFLAKE_USER"),
+    password=os.getenv("SNOWFLAKE_PASSWORD"),
+    account=os.getenv("SNOWFLAKE_ACCOUNT"),
+    warehouse=os.getenv("SNOWFLAKE_WAREHOUSE"),
     database="LOADDEMAND",
     schema="PUBLIC",
-    #insecure_mode=True,
+    # insecure_mode=True,
     # session_parameters={
     #     'QUERY_TAG': 'EndOfMonthFinancials',
     # }
