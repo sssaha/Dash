@@ -23,7 +23,7 @@ ctx = snowflake.connector.connect(
     warehouse="COMPUTE_WH",
     database="LOADDEMAND",
     schema="PUBLIC",
-    insecure_mode=True,
+    #insecure_mode=True,
     # session_parameters={
     #     'QUERY_TAG': 'EndOfMonthFinancials',
     # }
