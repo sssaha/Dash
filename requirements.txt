@@ -1,4 +1,6 @@
 fastapi[standard]
 celery
 redis
+gunicorn
+
 
