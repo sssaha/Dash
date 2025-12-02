@@ -1,9 +1,4 @@
-pandas
-dash
-dash-bootstrap-components
-pyodbc
-pyarrow
-gunicorn
-snowflake-connector-python
-dash_mantine_components
-dash_ag_grid
+fastapi[standard]
+celery
+redis
+
