@@ -64,6 +64,7 @@ def create_long_task(duration: int = 30):
     Args:
         duration: How long the task should run (in seconds)
     """
+    print(f'User Given Duration : {duration}' )
     task = long_running_task.delay(duration)
     return JSONResponse(
         {
@@ -117,3 +118,4 @@ def cancel_task(task_id: str):
     task_result.revoke(terminate=True)
 
     return JSONResponse({"task_id": task_id, "message": "Task cancellation requested"})
+
