@@ -1,4 +1,5 @@
 fastapi[standard]
-gavent
+gevent
 redis
 celery
+
