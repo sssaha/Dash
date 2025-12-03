@@ -1,6 +1,17 @@
 from celery import Celery
 import time
-import ssl, os
+import os
+import ssl
+import logging
+import sys
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    handlers=[logging.StreamHandler(sys.stdout)],
+)
+logger = logging.getLogger(__name__)
 
 REDIS_URL = os.getenv("REDIS_URL", "rediss://:")
 # Configure Celery
@@ -27,30 +38,43 @@ celery_app.conf.update(
     broker_connection_max_retries=10,
 )
 
+logger.info("Celery configured successfully")
+
 
 @celery_app.task(bind=True, name="long_running_task")
 def long_running_task(self, duration: int):
     """
     Simulate a long-running task with progress updates
     """
-    steps = 10
-    step_duration = duration / steps
+    logger.info(f"Task {self.request.id} started with duration {duration}s")
 
-    for i in range(steps):
-        time.sleep(step_duration)
+    try:
+        steps = 10
+        step_duration = duration / steps
 
-        # Update progress
-        self.update_state(
-            state="PROGRESS",
-            meta={
-                "current": i + 1,
-                "total": steps,
-                "progress": int((i + 1) / steps * 100),
-            },
-        )
+        for i in range(steps):
+            time.sleep(step_duration)
 
-    return {
-        "status": "completed",
-        "duration": duration,
-        "message": f"Task completed after {duration} seconds",
-    }
+            # Update progress
+            self.update_state(
+                state="PROGRESS",
+                meta={
+                    "current": i + 1,
+                    "total": steps,
+                    "progress": int((i + 1) / steps * 100),
+                },
+            )
+            logger.info(
+                f"Task {self.request.id} progress: {int((i + 1) / steps * 100)}%"
+            )
+
+        result = {
+            "status": "completed",
+            "duration": duration,
+            "message": f"Task completed after {duration} seconds",
+        }
+        logger.info(f"Task {self.request.id} completed successfully")
+        return result
+    except Exception as e:
+        logger.error(f"Task {self.request.id} failed: {str(e)}", exc_info=True)
+        raise
