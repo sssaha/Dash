@@ -14,6 +14,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 REDIS_URL = os.getenv("REDIS_URL", "rediss://:")
+
 # Configure Celery
 celery_app = Celery("worker", broker=REDIS_URL, backend=REDIS_URL)
 
@@ -36,6 +37,23 @@ celery_app.conf.update(
     broker_connection_retry_on_startup=True,
     broker_connection_retry=True,
     broker_connection_max_retries=10,
+    broker_pool_limit=10,
+    broker_transport_options={
+        "visibility_timeout": 3600,
+        "retry_on_timeout": True,
+        "socket_keepalive": True,
+        "socket_keepalive_options": {
+            1: 1,  # TCP_KEEPIDLE
+            2: 1,  # TCP_KEEPINTVL
+            3: 5,  # TCP_KEEPCNT
+        },
+        "health_check_interval": 30,
+    },
+    result_backend_transport_options={
+        "retry_on_timeout": True,
+        "socket_keepalive": True,
+        "health_check_interval": 30,
+    },
 )
 
 logger.info("Celery configured successfully")

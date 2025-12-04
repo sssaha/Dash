@@ -57,8 +57,11 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 def debug_celery():
     """Debug endpoint to check Celery configuration and worker status"""
     try:
-        # Get active workers
-        inspect = celery_app.control.inspect()
+        # Force reconnection before inspection
+        celery_app.connection().ensure_connection(max_retries=3)
+
+        # Get active workers with timeout
+        inspect = celery_app.control.inspect(timeout=5.0)
         active_workers = inspect.active()
         registered_tasks = inspect.registered()
         stats = inspect.stats()
@@ -84,7 +87,14 @@ def debug_celery():
         }
     except Exception as e:
         logger.error(f"Debug endpoint error: {str(e)}", exc_info=True)
-        return JSONResponse(status_code=500, content={"error": str(e)})
+        return JSONResponse(
+            status_code=503,
+            content={
+                "error": str(e),
+                "type": type(e).__name__,
+                "message": "Failed to inspect Celery workers. This may indicate workers are not running or Redis connection issues.",
+            },
+        )
 
 
 @app.get("/")
@@ -97,10 +107,11 @@ def read_root():
 def health_check():
     """Health check endpoint for Azure App Service"""
     try:
-        # THIS IS THE ACTUAL REDIS CONNECTION TEST:
-        # celery_app.backend.client is the Redis client
-        # ping() sends a PING command to Redis server
-        celery_app.backend.client.ping()
+        # Force fresh connection and ping
+        with celery_app.connection_or_acquire() as conn:
+            conn.ensure_connection(max_retries=3)
+            conn.default_channel.client.ping()
+
         logger.info("Health check passed - Redis connected")
         return {
             "status": "healthy",
